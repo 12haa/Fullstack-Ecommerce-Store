@@ -24,6 +24,7 @@ import {
   ActiveToggleDropDownItem,
   DeleteDropDownItem,
 } from "@/app/admin/products/new/_components/ProductsActions";
+import { Product } from "@prisma/client";
 
 const AdminProductsPage = () => {
   return (
@@ -54,9 +55,7 @@ async function ProductsTable() {
     orderBy: { name: "asc" },
   });
   if (products.length === 0) {
-    return {
-      message: "Product not found",
-    };
+    return <p>Product not found</p>;
   }
   return (
     <Table>
@@ -85,7 +84,7 @@ async function ProductsTable() {
                   </>
                 ) : (
                   <>
-                    <XCircle />
+                    <XCircle className="stroke-destructive" />
                     <span className="sr-only"> Not available for Purchase</span>
                   </>
                 )}
