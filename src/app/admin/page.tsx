@@ -55,7 +55,7 @@ async function getProductData() {
   ]);
   return { activeCount, inactiveCounts };
 }
-function wait(duration: number, title: string) {
+function wait(duration: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, duration);
   });
