@@ -42,7 +42,7 @@ export async function addProduct(prevState: unknown, formData: FormData) {
       priceInCents: data.priceInCents,
       imagePath,
       filePath,
-      isAvailableForPurchase: false,
+      isAvailableForPurchase: true,
     },
   });
   redirect("/admin/products");
@@ -114,7 +114,6 @@ export async function updateProduct(
       priceInCents: data.priceInCents,
       imagePath,
       filePath,
-      isAvailableForPurchase: false,
     },
   });
   redirect("/admin/products");
