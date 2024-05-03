@@ -33,6 +33,22 @@
             </llm>
           </llm>
         </chat>
+        <chat>
+          <accountId value="VXNlcjoxNzAzNDM=" />
+          <internalId value="7d54b253-328d-4355-a1c4-878314b815b7" />
+          <messages>
+            <list>
+              <message>
+                <speaker value="HUMAN" />
+                <text value="i have a admin folder for admin page and dashboard in my Nextjs project and i want to make it secure by creating a middleware file how can i do taht" />
+              </message>
+              <message>
+                <speaker value="ASSISTANT" />
+              </message>
+            </list>
+          </messages>
+          <updatedAt value="2024-05-03T08:03:01.4304825" />
+        </chat>
       </list>
     </chats>
     <defaultLlm>
