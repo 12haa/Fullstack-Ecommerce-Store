@@ -4,6 +4,7 @@ import { z } from "zod";
 import db from "@/db/db";
 import fs from "fs/promises";
 import { notFound, redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const fileSchema = z.instanceof(File, { message: "required" });
 const imageSchema = fileSchema.refine(
@@ -25,11 +26,11 @@ export async function addProduct(prevState: unknown, formData: FormData) {
   const data = result.data;
   console.log(data);
 
-  await fs.mkdir("products", { recursive: true });
+  await fs.mkdir("purchase", { recursive: true });
   const filePath = `products/${crypto.randomUUID()}-${data.file.name}`;
   await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
 
-  await fs.mkdir("public/products", { recursive: true });
+  await fs.mkdir("public/purchase", { recursive: true });
   const imagePath = `/products/${crypto.randomUUID()}-${data.image.name}`;
   await fs.writeFile(
     `public${imagePath}`,
@@ -45,6 +46,8 @@ export async function addProduct(prevState: unknown, formData: FormData) {
       isAvailableForPurchase: true,
     },
   });
+  revalidatePath("/");
+  revalidatePath("/purchase");
   redirect("/admin/products");
 }
 
@@ -56,6 +59,8 @@ export async function toggleProductAvailability(
     where: { id },
     data: { isAvailableForPurchase },
   });
+  revalidatePath("/");
+  revalidatePath("/purchase");
 }
 
 export async function deleteProduct(id: string) {
@@ -68,6 +73,8 @@ export async function deleteProduct(id: string) {
 
   await fs.unlink(product.filePath);
   await fs.unlink(`public${product.imagePath}`);
+  revalidatePath("/");
+  revalidatePath("/purchase");
 }
 
 const editSchema = addSchema.extend({
@@ -98,7 +105,7 @@ export async function updateProduct(
   let imagePath = product.imagePath;
   if (data.image != null && data.image.size > 0) {
     await fs.unlink(`public${product.imagePath}`);
-    await fs.mkdir("public/products", { recursive: true });
+    await fs.mkdir("public/purchase", { recursive: true });
     imagePath = `/products/${crypto.randomUUID()}-${data.image.name}`;
     await fs.writeFile(
       `public${imagePath}`,
@@ -116,5 +123,8 @@ export async function updateProduct(
       filePath,
     },
   });
+
+  revalidatePath("/purchase");
+  revalidatePath(`/products`);
   redirect("/admin/products");
 }

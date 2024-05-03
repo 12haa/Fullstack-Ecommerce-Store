@@ -49,6 +49,79 @@
           </messages>
           <updatedAt value="2024-05-03T08:03:01.4304825" />
         </chat>
+        <chat>
+          <accountId value="VXNlcjoxNzAzNDM=" />
+          <internalId value="8956c921-6f80-45a1-a4a9-077a624b3976" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
+        <chat>
+          <accountId value="VXNlcjoxNzAzNDM=" />
+          <internalId value="1e802249-fd29-44ea-a074-9abec4299fe9" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+          <messages>
+            <list>
+              <message>
+                <speaker value="HUMAN" />
+                <text value="hi" />
+              </message>
+              <message>
+                <speaker value="ASSISTANT" />
+                <text value="Hello! I'm Claude, an AI assistant created by Anthropic. How can I help you today?" />
+              </message>
+              <message>
+                <speaker value="HUMAN" />
+                <text value="creat a caching function with unstable_catch and cache from react" />
+              </message>
+              <message>
+                <speaker value="ASSISTANT" />
+                <text value="Sure, here's an example of how you can create a caching function using `unstable_cache` and `cache` from React:&#10;&#10;```jsx&#10;import { unstable_cache, cache } from 'react';&#10;&#10;// Define a cache key function&#10;const cacheKey = (args) =&gt; JSON.stringify(args);&#10;&#10;// Create a caching function&#10;const cachedFunction = unstable_cache((fn) =&gt; {&#10;  return (...args) =&gt; {&#10;    const key = cacheKey(args);&#10;    const cached = cache.get(key);&#10;&#10;    if (cached) {&#10;      return cached;&#10;    }&#10;&#10;    const result = fn(...args);&#10;    cache.set(key, result);&#10;    return result;&#10;  };&#10;});&#10;&#10;// Example usage&#10;const expensiveOperation = (a, b) =&gt; {&#10;  console.log('Performing expensive operation...');&#10;  // Simulate an expensive operation&#10;  const result = a + b;&#10;  return result;&#10;};&#10;&#10;const cachedExpensiveOperation = cachedFunction(expensiveOperation);&#10;&#10;// Call the cached function&#10;console.log(cachedExpensiveOperation(2, 3)); // Output: Performing expensive operation..., 5&#10;console.log(cachedExpensiveOperation(2, 3)); // Output: 5 (from cache)&#10;console.log(cachedExpensiveOperation(4, 5)); // Output: Performing expensive operation..., 9&#10;console.log(cachedExpensiveOperation(4, 5)); // Output: 9 (from cache)&#10;```&#10;&#10;Here's how the code works:&#10;&#10;1. We import the `unstable_cache` and `cache` utilities from React.&#10;2. We define a `cacheKey` function that takes the arguments of the function we want to cache and returns a string key. In this example, we use `JSON.stringify` to convert the arguments to a string.&#10;3. We create a `cachedFunction` using `unstable_cache`. This function takes another function `fn` as an argument and returns a new function that caches the results of `fn`.&#10;4. Inside the `cachedFunction`, we first generate a cache key using the `cacheKey` function and the arguments passed to the function.&#10;5. We check if the result is already cached using `cache.get(key)`. If it is, we return the cached result.&#10;6. If the result is not cached, we call the original function `fn` with the provided arguments and store the result in the cache using `cache.set(key, result)`.&#10;7. Finally, we return the result, whether it was retrieved from the cache or computed by the original function.&#10;8. In the example usage, we define an `expensiveOperation` function and create a cached version of it using `cachedExpensiveOperation = cachedFunction(expensiveOperation)`.&#10;9. We call `cachedExpensiveOperation` multiple times with the same and different arguments, demonstrating that the expensive operation is only performed once for each unique set of arguments, and subsequent calls with the same arguments return the cached result.&#10;&#10;Note that `unstable_cache` and `cache` are experimental features in React, and their API may change in the future. Additionally, this caching approach is suitable for pure functions (functions that always return the same output for the same input and have no side effects). If your function has side effects or depends on external state, you may need to adjust the caching strategy accordingly." />
+              </message>
+              <message>
+                <speaker value="HUMAN" />
+                <text value="combine both caching mechanisim in one function" />
+              </message>
+              <message>
+                <speaker value="ASSISTANT" />
+                <text value="Sure, here's an example of how you can combine both caching mechanisms (`unstable_cache` and `cache`) into a single function:&#10;&#10;```jsx&#10;import { unstable_cache, cache } from 'react';&#10;&#10;// Define a cache key function&#10;const cacheKey = (fn, args) =&gt; `${fn.name}:${JSON.stringify(args)}`;&#10;&#10;// Create a caching function&#10;const memoize = unstable_cache((fn) =&gt; {&#10;  const memoizedFn = (...args) =&gt; {&#10;    const key = cacheKey(fn, args);&#10;    const cached = cache.get(key);&#10;&#10;    if (cached) {&#10;      return cached;&#10;    }&#10;&#10;    const result = fn(...args);&#10;    cache.set(key, result);&#10;    return result;&#10;  };&#10;&#10;  return memoizedFn;&#10;});&#10;&#10;// Example usage&#10;const expensiveOperation = (a, b) =&gt; {&#10;  console.log('Performing expensive operation...');&#10;  // Simulate an expensive operation&#10;  const result = a + b;&#10;  return result;&#10;};&#10;&#10;const cachedExpensiveOperation = memoize(expensiveOperation);&#10;&#10;// Call the cached function&#10;console.log(cachedExpensiveOperation(2, 3)); // Output: Performing expensive operation..., 5&#10;console.log(cachedExpensiveOperation(2, 3)); // Output: 5 (from cache)&#10;console.log(cachedExpensiveOperation(4, 5)); // Output: Performing expensive operation..., 9&#10;console.log(cachedExpensiveOperation(4, 5)); // Output: 9 (from cache)&#10;```&#10;&#10;Here's how the code works:&#10;&#10;1. We define a `cacheKey` function that takes the function `fn` and its arguments `args` and generates a unique key by combining the function name and the stringified arguments.&#10;2. We create a `memoize` function using `unstable_cache`. This function takes another function `fn` as an argument and returns a memoized version of that function.&#10;3. Inside the `memoize` function, we create a new function `memoizedFn` that takes the arguments `args`.&#10;4. Inside `memoizedFn`, we generate a cache key using the `cacheKey` function, passing in the original function `fn` and its arguments `args`.&#10;5. We check if the result is already cached using `cache.get(key)`. If it is, we return the cached result.&#10;6. If the result is not cached, we call the original function `fn` with the provided arguments and store the result in the cache using `cache.set(key, result)`.&#10;7. Finally, we return the result, whether it was retrieved from the cache or computed by the original function.&#10;8. In the example usage, we define an `expensiveOperation` function and create a cached version of it using `cachedExpensiveOperation = memoize(expensiveOperation)`.&#10;9. We call `cachedExpensiveOperation` multiple times with the same and different arguments, demonstrating that the expensive operation is only performed once for each unique set of arguments, and subsequent calls with the same arguments return the cached result.&#10;&#10;By combining `unstable_cache` and `cache`, this `memoize` function provides a general-purpose caching mechanism that can be used with any function. The `unstable_cache` utility handles the memoization logic, while `cache` is used to store and retrieve the cached results.&#10;&#10;Note that this caching approach is still suitable for pure functions (functions that always return the same output for the same input and have no side effects). If your function has side effects or depends on external state, you may need to adjust the caching strategy accordingly." />
+              </message>
+            </list>
+          </messages>
+          <updatedAt value="2024-05-03T13:56:42.0609784" />
+        </chat>
+        <chat>
+          <accountId value="VXNlcjoxNzAzNDM=" />
+          <internalId value="bc6f954a-7632-4387-bf37-cd5e5d4713c3" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
+        <chat>
+          <accountId value="VXNlcjoxNzAzNDM=" />
+          <internalId value="5b951e78-b351-4e40-896d-08a830dba437" />
+          <llm>
+            <llm>
+              <model value="anthropic/claude-3-sonnet-20240229" />
+              <provider value="Anthropic" />
+              <title value="Claude 3 Sonnet" />
+            </llm>
+          </llm>
+        </chat>
       </list>
     </chats>
     <defaultLlm>

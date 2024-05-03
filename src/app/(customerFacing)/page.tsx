@@ -5,8 +5,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductsCard, { ProductCardSkeleton } from "@/components/ProductsCard";
 import { Suspense } from "react";
+import { cache } from "@/lib/cache";
 
-function getMostPopularProducts() {
+const getMostPopularProducts = cache(() => {
   return db.product.findMany({
     where: {
       isAvailableForPurchase: true,
@@ -14,16 +15,20 @@ function getMostPopularProducts() {
     orderBy: { order: { _count: "desc" } },
     take: 6,
   });
-}
-function getNewestProducts() {
-  return db.product.findMany({
-    where: {
-      isAvailableForPurchase: true,
-    },
-    orderBy: { createdAt: "desc" },
-    take: 6,
-  });
-}
+}, ["/purchase", "getProducts"]);
+const getNewestProducts = cache(
+  () => {
+    return db.product.findMany({
+      where: {
+        isAvailableForPurchase: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 6,
+    });
+  },
+  ["/", "getNewestProducts"],
+  { revalidate: 60 * 60 * 24 },
+);
 // Artificial Delay Function to test skeleton
 function wait(durations: number) {
   return new Promise((resolve) => setTimeout(resolve, durations));
